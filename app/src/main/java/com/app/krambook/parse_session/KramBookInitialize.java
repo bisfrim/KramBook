@@ -5,8 +5,10 @@ import android.util.Log;
 
 import com.app.krambook.models.Colg;
 import com.app.krambook.models.GlobalVariables;
+import com.app.krambook.models.Photo;
 import com.app.krambook.models.UserData;
 import com.parse.Parse;
+import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParsePush;
@@ -26,6 +28,7 @@ public class KramBookInitialize extends Application {
         Parse.enableLocalDatastore(this);
         ParseObject.registerSubclass(UserData.class);
         ParseObject.registerSubclass(Colg.class);
+        ParseObject.registerSubclass(Photo.class);
 
         Parse.initialize(new Parse.Configuration.Builder(KramBookInitialize.this)
                 .applicationId("c89bhRIVTVQ3mRqkErvNPhuY76yZJ5Qjgp3y8b79")
@@ -34,10 +37,10 @@ public class KramBookInitialize extends Application {
                 .build()
         );
 
-        //ParseACL defaultACL = new ParseACL();
-        //defaultACL.setPublicReadAccess(true);
+        ParseACL defaultACL = new ParseACL();
+        defaultACL.setPublicReadAccess(true);
         //defaultACL.setPublicWriteAccess(true);
-        //ParseACL.setDefaultACL(defaultACL, true);
+        ParseACL.setDefaultACL(defaultACL, true);
         Log.i(TAG, "Parse initialized");
 
 

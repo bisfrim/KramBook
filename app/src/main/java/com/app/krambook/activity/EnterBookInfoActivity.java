@@ -1,6 +1,7 @@
 package com.app.krambook.activity;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,6 +18,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.app.krambook.R;
+import com.app.krambook.models.Photo;
+import com.parse.ParseACL;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
@@ -29,6 +36,9 @@ import customfonts.MyTextView;
 public class EnterBookInfoActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
+    private ParseFile image;
+    private ProgressDialog progressDialog;
+    private Photo photo;
 
     ImageView priviewimage;
     String fileuri;
@@ -42,6 +52,7 @@ public class EnterBookInfoActivity extends AppCompatActivity {
     Integer DATE_DIALOG_ID = 999;
     ImageButton categoryimagebut;
     int mYear, mMonth, mDay;
+    byte[] saveData;
 
     MyTextView bookExpireDate, category_textView;
     MyEditText tagline_edit_text, isbn_edit_txtview, title_edit_txtview;
@@ -52,7 +63,10 @@ public class EnterBookInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter_book_info);
 
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(getString(R.string.uploading));
 
+        photo = new Photo();
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -95,7 +109,7 @@ public class EnterBookInfoActivity extends AppCompatActivity {
         priviewimage.setImageBitmap(bitmap);
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-        final byte[] saveData = bos.toByteArray();
+        saveData = bos.toByteArray();
 
 
         Calendar c = Calendar.getInstance();
@@ -209,9 +223,98 @@ public class EnterBookInfoActivity extends AppCompatActivity {
         }
 
         if (id == R.id.save_book_info) {
-            Toast.makeText(this, "All notifications marked as read!", Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "All notifications marked as read!", Toast.LENGTH_LONG).show();
+
+            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            Date expiredate = null;
+            try {
+                expiredate = df.parse(bookExpireDate.getText().toString());
+            } catch (java.text.ParseException e) {
+                e.printStackTrace();
+            }
+            Date today=new Date(System.currentTimeMillis());
+            if (today.compareTo(expiredate)>0||today.compareTo(expiredate)==0){
+
+                Toast.makeText(EnterBookInfoActivity.this,"Expired date is over,Please select other!",Toast.LENGTH_LONG).show();
+            }
+            else if(tagline_edit_text.getText().length() == 0){
+                tagline_edit_text.setError("Please enter a tagline");
+            }
+            else if(isbn_edit_txtview.getText().length() == 0){
+                isbn_edit_txtview.setError("Please enter the isbn");
+            }
+            else if(title_edit_txtview.getText().length() == 0){
+                title_edit_txtview.setError("Please enter a title");
+            }else if(author_edit_txtview.getText().length() == 0){
+                author_edit_txtview.setError("Please enter the author");
+            }else if(retailer_edit_txtview.getText().length() == 0){
+                retailer_edit_txtview.setError("Please enter retailer");
+            }else if(price_edit_txtview.getText().length() == 0){
+                price_edit_txtview.setError("Please enter price");
+            }else if(category_textView.getText().length() == 0){
+                category_textView.setError("Please enter category");
+            }else if(bookExpireDate.getText().length() == 0){
+                bookExpireDate.setError("Please pick expire date");
+            }else{
+                Calendar c = Calendar.getInstance();
+
+                image = new ParseFile("photo.jpg", saveData);
+                image.saveInBackground();
+                showProgressDialog();
+
+                //Associate the picture with the current user
+                photo.setUser(ParseUser.getCurrentUser());
+                //Add the image
+                photo.setImage(image);
+                //Add the thumbnail
+                photo.setLike("12");
+                photo.setCategory(catagory);
+                photo.setExpiry(expiredate);
+                photo.setTagline(tagline_edit_text.getText().toString());
+                photo.setIsbn(isbn_edit_txtview.getText().toString());
+                photo.setTitle(title_edit_txtview.getText().toString());
+                photo.setBookAuthor(author_edit_txtview.getText().toString());
+                photo.setRetail(retailer_edit_txtview.getText().toString());
+                photo.setPrice(price_edit_txtview.getText().toString());
+                ParseACL acl = new ParseACL();
+                acl.setPublicReadAccess(true);
+                acl.setPublicWriteAccess(true);
+                photo.setACL(acl);
+                photo.put("expflag","false");
+
+                //save the picture and return to the MainActivity
+                photo.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        hideProgressDialog();
+
+                        Intent intent = new Intent(EnterBookInfoActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.left_in, R.anim.right_out);
+
+                        if (e == null) {
+
+                        } else {
+                            try {
+                                showProgressDialog();
+                            } catch (Exception e1) {
+                                e1.printStackTrace();
+                            }
+                        }
+                    }
+                });
+
+            }
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showProgressDialog() {
+        progressDialog.show();
+    }
+
+    private void hideProgressDialog() {
+        progressDialog.dismiss();
     }
 }
