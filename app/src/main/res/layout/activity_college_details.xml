@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.app.krambook.activity.CollegeDetailsActivity">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+
+        <LinearLayout
+            android:id="@+id/linear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:orientation="vertical">
+
+            <include layout="@layout/toolbar" />
+
+            <FrameLayout
+                android:id="@+id/frame_imgage"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:background="@drawable/studentbg"
+                android:scaleType="centerCrop">
+
+
+            </FrameLayout>
+
+
+            <customfonts.MyTextView
+                android:id="@+id/head"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:gravity="center"
+                android:text="Enter College Details"
+                android:textColor="#4c565f"
+                android:textSize="29dp"
+
+                />
+
+
+            <!-- Search for school -->
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/search_school_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colortext"
+                android:textColorHint="@color/colorhint">
+
+
+                <customfonts.MyAutoCompleteView
+                    android:id="@+id/school_autoComplete"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="46dp"
+                    android:background="#0000"
+                    android:drawableLeft="@drawable/user"
+                    android:drawablePadding="12dp"
+                    android:gravity="left"
+                    android:hint="Enter College/University"
+                    android:padding="12dp"
+                    android:textColor="@color/colortext"
+                    android:textColorHint="@color/colorhint"
+                    android:textSize="16sp" />
+
+
+            </android.support.design.widget.TextInputLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="56dp"
+                android:layout_marginRight="56dp"
+                android:background="#59d58d" />
+
+
+            <!-- First and last name-->
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/school_location_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colortext"
+                android:textColorHint="@color/colorhint">
+
+                <customfonts.MyEditText
+                    android:id="@+id/school_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="46dp"
+                    android:background="#0000"
+                    android:drawableLeft="@drawable/user"
+                    android:drawablePadding="12dp"
+                    android:gravity="left"
+                    android:hint="Location"
+
+                    android:padding="12dp"
+                    android:textColor="@color/colortext"
+                    android:textColorHint="@color/colorhint"
+                    android:textSize="16sp"
+
+
+                    />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="56dp"
+                android:layout_marginRight="56dp"
+                android:background="#59d58d" />
+
+
+            <customfonts.MyTextView
+                android:id="@+id/submit_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
+                android:layout_marginLeft="60dp"
+                android:layout_marginRight="60dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/rect1"
+                android:clickable="true"
+                android:elevation="3dp"
+                android:gravity="center"
+                android:onClick="onSubmitHandler"
+                android:padding="8dp"
+                android:text="Submit"
+                android:textColor="#fff"
+                android:textSize="16sp" />
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</RelativeLayout>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/save_book_info"
+        android:icon="@drawable/check_filter"
+        android:title="@string/save_info"
+        app:showAsAction="always"/>
+
+</menu>

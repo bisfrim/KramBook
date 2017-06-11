@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home_black_24dp"
+            android:title="@string/drawer_home" />
+
+        <item
+            android:id="@+id/nav_sell"
+            android:icon="@drawable/ic_sell_black_24dp"
+            android:title="@string/drawer_item_sell" />
+
+        <item
+            android:id="@+id/nav_categories"
+            android:icon="@drawable/ic_photo_library_black_24dp"
+            android:title="@string/drawer_item_categories" />
+        <item
+            android:id="@+id/nav_chat"
+            android:icon="@drawable/ic_message_text_black_24dp"
+            android:title="@string/drawer_item_chat" />
+
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_account_black_24dp"
+            android:title="@string/drawer_item_profile" />
+
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="@string/nav_settings" />
+    </group>
+
+    <item android:title="Other">
+        <menu>
+            <item
+                android:id="@+id/nav_about_us"
+                android:title="@string/nav_about_us" />
+            <item
+                android:id="@+id/nav_logout"
+                android:title="@string/action_logout" />
+        </menu>
+    </item>
+
+</menu>

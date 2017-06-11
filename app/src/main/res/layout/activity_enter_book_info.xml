@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.app.krambook.activity.EnterBookInfoActivity">
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/relativeLayout8">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/linearLayout11"
+                android:layout_alignParentBottom="true">
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1">
+
+                    <customfonts.MyEditText
+                        android:layout_width="260dp"
+                        android:layout_height="match_parent"
+                        android:id="@+id/tagline_editText"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:background="@null"
+                        android:textColor="#ffaea5a8"
+                        android:maxLines="1"
+                        android:typeface="sans"
+                        android:inputType="textCapSentences|textPersonName"
+                        android:maxLength="100" />
+
+                    <customfonts.MyTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="TAGLINE"
+                        android:id="@+id/tagline_title_textView"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:gravity="center_vertical"
+                        android:textColor="#ff827a7d"
+                        android:textSize="15sp"
+                        android:layout_marginLeft="15dp" />
+                </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+
+                        android:background="#59d58d" />
+
+
+
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+
+                    android:layout_weight="1">
+
+                    <customfonts.MyEditText
+                        android:layout_width="260dp"
+                        android:layout_height="match_parent"
+                        android:id="@+id/isbn_editText"
+                        android:background="@null"
+                        android:textColor="#ffaea5a8"
+                        android:maxLines="1"
+                        android:typeface="sans"
+                        android:inputType="textCapSentences|textPersonName"
+                        android:maxLength="100"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true" />
+
+                    <customfonts.MyTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="ISBN"
+                        android:id="@+id/isbn_title_textView"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:gravity="center_vertical"
+                        android:textColor="#ff827a7d"
+                        android:textSize="15sp"
+                        android:layout_marginLeft="15dp" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+
+                    android:background="#59d58d" />
+
+
+
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+
+                    android:layout_weight="1">
+
+                    <customfonts.MyEditText
+                        android:layout_width="260dp"
+                        android:layout_height="match_parent"
+                        android:id="@+id/book_title_editText"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:background="@null"
+                        android:textColor="#ffaea5a8"
+                        android:maxLines="1"
+                        android:typeface="sans"
+                        android:inputType="textCapSentences|textPersonName"
+                        android:maxLength="100" />
+
+                    <customfonts.MyTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="TITLE"
+                        android:id="@+id/book_title_textView"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:gravity="center_vertical"
+                        android:textColor="#ff827a7d"
+                        android:textSize="15sp"
+                        android:layout_marginLeft="15dp" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+
+                    android:background="#59d58d" />
+
+
+
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1">
+
+                    <customfonts.MyEditText
+                        android:layout_width="260dp"
+                        android:layout_height="match_parent"
+                        android:id="@+id/book_author_editText"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:background="@null"
+                        android:textColor="#ffaea5a8"
+                        android:maxLines="1"
+                        android:typeface="sans"
+                        android:inputType="textCapSentences|textPersonName"
+                        android:maxLength="100" />
+
+                    <customfonts.MyTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="AUTHOR"
+                        android:id="@+id/book_author_textView"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:gravity="center_vertical"
+                        android:textColor="#ff827a7d"
+                        android:textSize="15sp"
+                        android:layout_marginLeft="15dp" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+
+                    android:background="#59d58d" />
+
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1">
+
+                    <customfonts.MyEditText
+                        android:layout_width="260dp"
+                        android:layout_height="match_parent"
+                        android:id="@+id/ratailer_deal_editText"
+                        android:background="@null"
+                        android:textColor="#ffaea5a8"
+                        android:maxLines="1"
+                        android:typeface="sans"
+                        android:inputType="textCapWords|textPersonName"
+                        android:maxLength="100"
+                        android:layout_alignBaseline="@+id/ratailer_title_textView"
+                        android:layout_alignBottom="@+id/ratailer_title_textView"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true" />
+
+                    <customfonts.MyTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="RETAILER"
+                        android:id="@+id/ratailer_title_textView"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:gravity="center_vertical"
+                        android:textColor="#ff81797c"
+                        android:textSize="15sp"
+                        android:layout_marginLeft="15dp" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+
+                    android:background="#59d58d" />
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+
+                    android:layout_weight="1">
+
+                    <customfonts.MyEditText
+                        android:layout_width="260dp"
+                        android:layout_height="match_parent"
+                        android:id="@+id/price_editText"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:background="@null"
+                        android:textColor="#ffaea5a8"
+                        android:maxLines="1"
+                        android:typeface="sans"
+                        android:inputType="textCapSentences|textPersonName"
+                        android:maxLength="100" />
+
+                    <customfonts.MyTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="PRICE"
+                        android:id="@+id/price_title_textView"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:gravity="center_vertical"
+                        android:textColor="#ff827a7d"
+                        android:textSize="15sp"
+                        android:layout_marginLeft="15dp" />
+                </RelativeLayout>
+
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+
+                    android:background="#59d58d" />
+
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+
+                    android:layout_weight="1">
+
+                    <ImageButton
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:id="@+id/category_imageButton"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:src="@drawable/arrow_right_circle"
+                        android:background="@null" />
+
+                    <customfonts.MyTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="CATEGORY"
+                        android:id="@+id/category_title_textView"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:gravity="center_vertical"
+                        android:textColor="#ff7e7578"
+                        android:textSize="15sp"
+                        android:layout_marginLeft="15dp" />
+
+                    <customfonts.MyTextView
+                        android:layout_width="200dp"
+                        android:layout_height="match_parent"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:id="@+id/category_deal_textView"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@+id/category_imageButton"
+                        android:layout_toStartOf="@+id/category_imageButton"
+                        android:gravity="center_vertical"
+                        android:textColor="#ffaea5a8"
+                        android:typeface="sans" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+
+                    android:background="#59d58d" />
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+
+                    android:layout_weight="1">
+
+                    <ImageButton
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:id="@+id/location_imageButton"
+                        android:src="@drawable/arrow_right_circle"
+                        android:background="@null"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true" />
+
+                    <customfonts.MyTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="LOCATION"
+                        android:id="@+id/location_tltle_textView"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:gravity="center_vertical"
+                        android:textColor="#ff82797c"
+                        android:textSize="15sp"
+                        android:layout_marginLeft="15dp" />
+
+                    <customfonts.MyTextView
+                        android:layout_width="200dp"
+                        android:layout_height="match_parent"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:id="@+id/location_deal_textView"
+                        android:layout_centerVertical="true"
+                        android:gravity="center_vertical"
+                        android:textColor="#ffaea5a8"
+                        android:layout_toLeftOf="@+id/location_imageButton"
+                        android:typeface="sans" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+
+                    android:background="#59d58d" />
+
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1">
+
+                    <customfonts.MyTextView
+                        android:layout_width="260dp"
+                        android:layout_height="match_parent"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:id="@+id/expirer_deal_textView"
+                        android:gravity="center"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:textColor="#ffaea5a8" />
+
+                    <customfonts.MyTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="EXPIRY DATE"
+                        android:id="@+id/expiry_title_textView"
+                        android:layout_centerVertical="true"
+                        android:gravity="center_vertical"
+                        android:textColor="#ff7c7477"
+                        android:textSize="15sp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginLeft="15dp" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+
+                    android:background="#59d58d" />
+
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/linearLayout11">
+
+
+                <com.github.siyamed.shapeimageview.RoundedImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/product_deal_imageView"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:scaleType="fitXY"
+                    app:siBorderWidth="1dp"
+                    app:siBorderColor="#ff847a7f"
+                    app:siRadius="2dp"
+                    />
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+
+
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/relativeLayout8">
+
+        <include layout="@layout/toolbar" />
+
+    </RelativeLayout>
+
+
+
+
+  <!--  <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/colorPrimaryDark"
+        android:id="@+id/relativeLayout8">
+
+        <ImageButton
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:id="@+id/back_deal_imageButton"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/filter_backspace"
+            android:background="@null" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/save_pro_imageButton"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/check_filter"
+            android:background="@null" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Details"
+            android:id="@+id/product_enter_title_textView"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:textColor="#fff7f8ff" />
+    </RelativeLayout>-->
+
+</RelativeLayout>

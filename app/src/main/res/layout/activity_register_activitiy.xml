@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.RegisterActivitiy">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+
+        <LinearLayout
+            android:id="@+id/linear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/toolbar" />
+
+            <FrameLayout
+                android:id="@+id/frame_imgage"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:background="@drawable/studentbg"
+                android:scaleType="centerCrop">
+
+
+            </FrameLayout>
+
+       <!--     &lt;!&ndash; Search for school &ndash;&gt;
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/search_school_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colortext"
+                android:textColorHint="@color/colorhint">
+
+
+                <customfonts.MyAutoCompleteView
+                    android:id="@+id/myautoComplete"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="46dp"
+                    android:background="#0000"
+                    android:drawableLeft="@drawable/user"
+                    android:drawablePadding="12dp"
+                    android:gravity="left"
+                    android:hint="Enter College/University"
+
+                    android:padding="12dp"
+                    android:textColor="@color/colortext"
+                    android:textColorHint="@color/colorhint"
+                    android:textSize="16sp" />
+
+
+
+            </android.support.design.widget.TextInputLayout>
+
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="56dp"
+                android:layout_marginRight="56dp"
+                android:background="#59d58d" />-->
+
+
+
+
+            <!-- First and last name-->
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/register_name_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colortext"
+                android:textColorHint="@color/colorhint">
+
+                <customfonts.MyEditText
+                    android:id="@+id/register_full_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="46dp"
+                    android:background="#0000"
+                    android:drawableLeft="@drawable/user"
+                    android:drawablePadding="12dp"
+                    android:gravity="left"
+                    android:hint="First and Last name"
+
+                    android:padding="12dp"
+                    android:textColor="@color/colortext"
+                    android:textColorHint="@color/colorhint"
+                    android:textSize="16sp"
+
+
+                    />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="56dp"
+                android:layout_marginRight="56dp"
+                android:background="#59d58d" />
+
+
+            <!-- Username -->
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/register_username_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colortext"
+                android:textColorHint="@color/colorhint">
+
+                <customfonts.MyEditText
+                    android:id="@+id/register_username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="46dp"
+                    android:background="#0000"
+                    android:drawableLeft="@drawable/user"
+                    android:drawablePadding="12dp"
+                    android:gravity="left"
+                    android:hint="Create username"
+
+                    android:padding="12dp"
+                    android:textColor="@color/colortext"
+                    android:textColorHint="@color/colorhint"
+                    android:textSize="16sp"
+
+
+                    />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="56dp"
+                android:layout_marginRight="56dp"
+                android:background="#59d58d" />
+
+
+            <!-- Email -->
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/register_email_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colortext"
+                android:textColorHint="@color/colorhint">
+
+                <customfonts.MyEditText
+                    android:id="@+id/register_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="46dp"
+                    android:background="#0000"
+                    android:drawableLeft="@drawable/user"
+                    android:drawablePadding="12dp"
+                    android:gravity="left"
+                    android:hint="Email (only edu. accounts)"
+                    android:inputType="textEmailAddress"
+                    android:padding="12dp"
+                    android:textColor="@color/colortext"
+                    android:textColorHint="@color/colorhint"
+                    android:textSize="16sp"
+
+
+                    />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="56dp"
+                android:layout_marginRight="56dp"
+                android:background="#59d58d" />
+
+
+
+
+
+
+            <!-- Phone number -->
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/register_phone_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colortext"
+                android:textColorHint="@color/colorhint">
+
+                <customfonts.MyEditText
+                    android:id="@+id/register_phoneNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="46dp"
+                    android:background="#0000"
+                    android:drawableLeft="@drawable/user"
+                    android:drawablePadding="12dp"
+                    android:inputType="number"
+                    android:gravity="left"
+                    android:hint="Phone number"
+                    android:padding="12dp"
+                    android:textColor="@color/colortext"
+                    android:textColorHint="@color/colorhint"
+                    android:textSize="16sp"
+
+                    />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="56dp"
+                android:layout_marginRight="56dp"
+                android:background="#59d58d" />
+
+
+
+            <!-- Password -->
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/register_pass_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colortext"
+                android:textColorHint="@color/colorhint">
+
+
+                <customfonts.MyEditText
+                    android:id="@+id/register_pass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="46dp"
+                    android:layout_marginRight="46dp"
+                    android:background="#0000"
+                    android:drawableLeft="@drawable/pass"
+                    android:drawablePadding="12dp"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:padding="12dp"
+                    android:textColor="@color/colortext"
+                    android:textColorHint="@color/colorhint"
+                    android:textSize="16sp"
+
+
+                    />
+            </android.support.design.widget.TextInputLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="56dp"
+                android:layout_marginRight="56dp"
+                android:background="#59d58d" />
+
+
+            <!-- Re-enter Password -->
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/register_reenter_pass_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colortext"
+                android:textColorHint="@color/colorhint">
+
+
+                <customfonts.MyEditText
+                    android:id="@+id/register_reenter_pass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="46dp"
+                    android:layout_marginRight="46dp"
+                    android:background="#0000"
+                    android:drawableLeft="@drawable/pass"
+                    android:drawablePadding="12dp"
+                    android:hint="Re-enter Password"
+                    android:inputType="textPassword"
+                    android:padding="12dp"
+                    android:textColor="@color/colortext"
+                    android:textColorHint="@color/colorhint"
+                    android:textSize="16sp"
+
+                    />
+
+
+            </android.support.design.widget.TextInputLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="56dp"
+                android:layout_marginRight="56dp"
+                android:background="#59d58d" />
+
+            <customfonts.MyTextView
+                android:id="@+id/register_signup_Btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
+                android:layout_marginLeft="60dp"
+                android:layout_marginRight="60dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/rect1"
+                android:elevation="3dp"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="Sign Up"
+                android:clickable="true"
+                android:onClick="onRegisterClickHandler"
+                android:textColor="#fff"
+                android:textSize="16sp" />
+
+
+            <customfonts.MyTextView
+                android:id="@+id/registerOr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/acc"
+                android:gravity="center"
+                android:lines="1"
+                android:text="or"
+                android:textColor="@color/colorhint" />
+
+
+            <LinearLayout
+                android:id="@+id/linear3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/rectfb"
+                    android:orientation="horizontal"
+
+
+                    >
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:src="@drawable/fb"
+                        android:clickable="true"
+
+                        />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/rectgoogle"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:src="@drawable/google"
+                        android:clickable="true"
+
+                        />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+            <customfonts.MyTextView
+                android:id="@+id/or"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/acc"
+                android:gravity="center"
+                android:lines="1"
+                android:clickable="true"
+                android:text="Already have an accont"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="15dp"
+                android:textColor="@color/colorhint" />
+
+
+
+        </LinearLayout>
+
+
+
+
+    </ScrollView>
+
+
+</RelativeLayout>
