@@ -156,6 +156,7 @@ public class RegisterActivitiy extends AppCompatActivity {
                                         newUser.setEmail(emailField);
                                         newUser.setUserPhoneNumber(phoneField);
                                         newUser.setPassword(passwordField);
+                                        newUser.setUserNotification(true);
                                         //newUser.setUserLoc(userLocation);
                                         Log.d("ColgId", "Error" + KramBookInitialize.global.getSomeVariable());
                                         newUser.put("colgId", KramBookInitialize.global.getSomeVariable());

@@ -11,6 +11,7 @@ import android.view.View;
 import com.app.krambook.R;
 import com.app.krambook.adapter.SuggestionAdapter;
 import com.app.krambook.models.Colg;
+import com.parse.ParseACL;
 
 import customfonts.MyAutoCompleteView;
 import customfonts.MyEditText;
@@ -40,6 +41,12 @@ public class CollegeDetailsActivity extends AppCompatActivity {
         colgeDetails.setName(schoolSearch.getText().toString());
         Log.d("name", "CollgeLocation:" +  String.valueOf(schoolSearch.getText()));
         colgeDetails.setLocation(schoolLocation.getText().toString());
+
+        //ParseACL acl = new ParseACL();
+        //acl.setPublicReadAccess(false);
+        //acl.setPublicWriteAccess(false);
+        //colgeDetails.setACL(acl);
+
         colgeDetails.saveInBackground();
         startActivity(new Intent(getApplicationContext(), ChooseColgActivity.class));
 

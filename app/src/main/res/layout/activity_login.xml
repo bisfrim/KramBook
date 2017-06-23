@@ -60,7 +60,7 @@
                     android:drawableLeft="@drawable/user"
                     android:drawablePadding="12dp"
                     android:gravity="left"
-                    android:hint="Email"
+                    android:hint="Username"
 
                     android:padding="12dp"
                     android:textColor="@color/colortext"

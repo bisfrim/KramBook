@@ -43,7 +43,7 @@ public class UserDispatchActivity extends Activity {
                     builder.setMessage("You have not yet verified. Please check your email")
                             .setTitle("Verification Pending!")
                             .setCancelable(false)
-                            .setNeutralButton("Yes", new DialogInterface.OnClickListener() {
+                            .setNeutralButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     Intent intent = new Intent(UserDispatchActivity.this, ChooseColgActivity.class); //->LoginActivity

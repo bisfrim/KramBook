@@ -82,6 +82,12 @@ public class Photo extends ParseObject {
     public void setCategory(String category){
         put("category",category);
     }
+    public String getCondition(){
+        return getString("condition");
+    }
+    public void setCondition(String condition){
+        put("condition", condition);
+    }
 
     public String getIsbn(){
         return getString("isbn");
@@ -110,5 +116,13 @@ public class Photo extends ParseObject {
     public void setPrice(String price){
         put("price",price);
     }
+
+    public String getColgId() { return getString("colgId"); }
+    public void setColgId(String colgId){
+        put("colgId",colgId);
+    }
+
+    public String getHasSold(){return getString("hasSold");}
+    public void setHasSold(String has){put("hasSold",has);}
 
 }

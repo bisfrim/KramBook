@@ -27,5 +27,4 @@
         android:maxLines="1"
         android:textColor="@android:color/white" />
 
-
 </com.app.krambook.entity.HeaderView>

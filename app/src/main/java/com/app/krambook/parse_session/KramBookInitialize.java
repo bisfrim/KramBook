@@ -3,6 +3,7 @@ package com.app.krambook.parse_session;
 import android.app.Application;
 import android.util.Log;
 
+import com.app.krambook.activity.Activity;
 import com.app.krambook.models.Colg;
 import com.app.krambook.models.GlobalVariables;
 import com.app.krambook.models.Photo;
@@ -13,6 +14,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParsePush;
 import com.parse.SaveCallback;
+import com.rollbar.android.Rollbar;
 
 /**
  * Created by nubxf5 on 05/02/2017.
@@ -24,11 +26,12 @@ public class KramBookInitialize extends Application {
 
     public void onCreate(){
         super.onCreate();
-
+        Rollbar.init(this, "86b0d04719444f20b4ee02c9f4c846a8", "production");
         Parse.enableLocalDatastore(this);
         ParseObject.registerSubclass(UserData.class);
         ParseObject.registerSubclass(Colg.class);
         ParseObject.registerSubclass(Photo.class);
+        ParseObject.registerSubclass(Activity.class);
 
         Parse.initialize(new Parse.Configuration.Builder(KramBookInitialize.this)
                 .applicationId("c89bhRIVTVQ3mRqkErvNPhuY76yZJ5Qjgp3y8b79")

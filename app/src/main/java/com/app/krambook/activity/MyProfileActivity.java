@@ -9,6 +9,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -26,9 +27,15 @@ import com.app.krambook.fragments.SoldFragment;
 import com.app.krambook.fragments.WishListFragment;
 import com.app.krambook.models.Beanclass;
 import com.app.krambook.models.UserData;
+import com.app.krambook.utils.FileCache;
+import com.app.krambook.utils.ImageLoader;
+import com.app.krambook.utils.ImageLoaderGrid;
+import com.app.krambook.utils.MemoryCache;
 import com.bumptech.glide.Glide;
 import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -37,11 +44,21 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import customfonts.MyTextView;
+import it.neokree.materialtabs.MaterialTab;
+import it.neokree.materialtabs.MaterialTabHost;
+import it.neokree.materialtabs.MaterialTabListener;
 
-public class MyProfileActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
+public class MyProfileActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener, MaterialTabListener {
+
+    int favoriteCount;
+    int postCount;
     ExpandableHeightGridView gridview;
     CoordinatorLayout rootLayout;
-
+    ImageLoader imageLoaderprofile;
+    MaterialTabHost tabHost;
+    MyListingFragment myListing;
+    SoldFragment sold;
+    WishListFragment wishList;
     public final static String EXTRA_USER_ID = "userId";
 
     private ArrayList<Beanclass> beans;
@@ -49,7 +66,10 @@ public class MyProfileActivity extends AppCompatActivity implements AppBarLayout
     private Toolbar mToolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private ViewPagerAdapter adapter;
     private boolean isHideToolbarView = false;
+    public static ImageLoaderGrid imageLoader;
+
 
     @Bind(R.id.toolbar_header_view)
     protected HeaderView toolbarHeaderView;
@@ -66,6 +86,8 @@ public class MyProfileActivity extends AppCompatActivity implements AppBarLayout
     protected UserData mCurrentUser;
     protected ImageView imgvThubnail, imgvProfile;
     protected MyTextView userFullName, userGender, userLocation, userDeptment, userLastSeen;
+    private MyTextView itemPostedCount, itemFavoriteCount;
+
 
 
     private final FetchCallback fetchUserCallback = new FetchCallback();
@@ -87,6 +109,11 @@ public class MyProfileActivity extends AppCompatActivity implements AppBarLayout
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(" ");
 
+        new FileCache(this).clear();
+        new MemoryCache().clear();
+        imageLoader=new ImageLoaderGrid(MyProfileActivity.this);
+        imageLoaderprofile=new ImageLoader(MyProfileActivity.this);
+
         imgvProfile = (ImageView) findViewById(R.id.user_profile_image);
 
         rootLayout = (CoordinatorLayout) findViewById(R.id.rootLayout);
@@ -95,16 +122,82 @@ public class MyProfileActivity extends AppCompatActivity implements AppBarLayout
         mCurrentUser.fetchIfNeededInBackground(fetchUserCallback);
         //initUi();
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
+        itemPostedCount = (MyTextView)findViewById(R.id.item_postedCountView);
+        itemFavoriteCount = (MyTextView)findViewById(R.id.item_favoriteCountView);
 
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
+        myListing = new MyListingFragment();
+        sold = new SoldFragment();
+        wishList = new WishListFragment();
+
+
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        tabHost = (MaterialTabHost) this.findViewById(R.id.tabHost);
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                tabHost.setSelectedNavigationItem(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+
+        // insert all tabs from pagerAdapter data
+        for (int i = 0; i < adapter.getCount(); i++) {
+            tabHost.addTab(
+                    tabHost.newTab()
+                            .setText(adapter.getPageTitle(i))
+                            .setTabListener(this)
+            );
+
+        }
+        //setupViewPager(viewPager);
+
+        //tabLayout = (TabLayout) findViewById(R.id.tabs);
+        //tabLayout.setupWithViewPager(viewPager);
 
 
 
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
+        ParseQuery<ParseObject> postquaryCount = ParseQuery.getQuery("Photo");
+        postquaryCount.whereEqualTo("user", ParseUser.getCurrentUser());
+        postquaryCount.include("photo");
+        try{
+            postCount = postquaryCount.count();
+        }catch(ParseException e){
+            e.printStackTrace();
+        }
+        itemPostedCount.setText(Integer.toString(postCount));
+
+
+        ParseQuery<ParseObject> favoritequaryCount = ParseQuery.getQuery("Follow");
+        favoritequaryCount.whereEqualTo("user", ParseUser.getCurrentUser());
+        favoritequaryCount.include("photo");
+        try {
+            favoriteCount = favoritequaryCount.count();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        itemFavoriteCount.setText(Integer.toString(favoriteCount));
+
+    }
 
 
     private void initUi() {
@@ -123,13 +216,13 @@ public class MyProfileActivity extends AppCompatActivity implements AppBarLayout
 
 
 
-    private void setupViewPager(ViewPager viewPager) {
+   /* private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new MyListingFragment(), "My Listing");
         adapter.addFragment(new SoldFragment(), "Sold");
         adapter.addFragment(new WishListFragment(), "Wish List");
         viewPager.setAdapter(adapter);
-    }
+    }*/
 
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int offset) {
@@ -148,7 +241,7 @@ public class MyProfileActivity extends AppCompatActivity implements AppBarLayout
 
     }
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
+   /* class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
@@ -175,8 +268,65 @@ public class MyProfileActivity extends AppCompatActivity implements AppBarLayout
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
         }
+    }*/
+
+
+
+    @Override
+    public void onTabSelected(MaterialTab tab) {
+        viewPager.setCurrentItem(tab.getPosition());
     }
 
+    @Override
+    public void onTabReselected(MaterialTab tab) {
+
+    }
+
+    @Override
+    public void onTabUnselected(MaterialTab tab) {
+
+    }
+
+    private class ViewPagerAdapter extends FragmentStatePagerAdapter {
+
+        public ViewPagerAdapter(FragmentManager fm) {
+            super(fm);
+
+        }
+
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return myListing;
+                case 1:
+                    return sold;
+                case 2:
+                    return wishList;
+
+            }
+            return null;
+        }
+
+        @Override
+        public int getCount() {
+            return 3;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return "My Listing";
+                case 1:
+                    return "Sold";
+                case 2:
+                    return "WishList";
+
+            }
+            return null;
+        }
+
+    }
 
 
     //fetch and update user info from this callback

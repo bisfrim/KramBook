@@ -14,7 +14,9 @@
     <string name="progress_signup">Signing you up&#8230;</string>
     <string name="progress_login">Logging you in&#8230;</string>
     <string name="uploading">Saving data...</string>
+    <string name="loading">Loading...</string>
 
+    <string name="banner_ad_unit_id">ca-app-pub-7340006778875243/6974705813</string>
     <!-- Drawer Items -->
     <string name="drawer_home">Home</string>
     <string name="drawer_item_sell">Sell Your Books</string>
@@ -44,8 +46,10 @@
     <string name="progress_uploading">Saving photo...&#8230;</string>
     <string name="saving_info">Saving...&#8230;</string>
 
-    <string name="choose_colg">Choose School</string>
+    <string name="choose_colg">Choose or Add School</string>
     <string name="school_details">Add School</string>
+    <string name="book_condition">Select Book Condition</string>
+    <string name="book_detail">Detail</string>
 
     <string name="title_activity_proceed">Proceed</string>
     <string name="title_complete_profile">Complete your Profile</string>

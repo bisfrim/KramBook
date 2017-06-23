@@ -29,6 +29,7 @@ public class UserData extends ParseUser {
     public static final String USER_PHOTO_THUMB = "photo_thumb";
     public static final String USER_AGE = "age";
     public static final String USER_COLG = "colgId";
+    public static final String USER_NOTIFICATION = "notification";
     public static final String USER_DESCRIPTION = "desc";
     public static final String USER_EMAIL_VERIFIED = "emailVerified";
     public static final String USER_IS_VERIFIED = "Is_Verified";
@@ -214,6 +215,14 @@ public class UserData extends ParseUser {
 
     public String getOrientation(){
         return getString(USER_ORIENTATION);
+    }
+
+    public void setUserNotification(boolean userNotification){
+        put(USER_NOTIFICATION, userNotification);
+    }
+
+    public String getUserNotification(){
+        return getString(USER_NOTIFICATION);
     }
 
     public void setOrientation(String orientation){

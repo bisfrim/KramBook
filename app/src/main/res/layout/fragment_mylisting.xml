@@ -6,6 +6,24 @@
 
 
 
+
+    <GridView
+        android:id="@+id/gridList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:gravity="center_horizontal"
+        android:horizontalSpacing="10dp"
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="10dp"
+        android:choiceMode="singleChoice"
+        android:longClickable="true"/>
+
+
+
     <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:id="@+id/right_labels"
         android:layout_width="wrap_content"
@@ -38,6 +56,16 @@
             fab:fab_title="Enter ISBN" />
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+
+    <customfonts.MyTextView
+        android:id="@+id/item_posted_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="invisible"
+        android:textSize="20sp"
+        android:hint="No Item Posted"/>
 
 
 </android.support.design.widget.CoordinatorLayout>
