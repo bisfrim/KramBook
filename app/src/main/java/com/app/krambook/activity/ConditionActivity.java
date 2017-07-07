@@ -55,7 +55,7 @@ public class ConditionActivity extends AppCompatActivity {
         fileuri = dataCategoryIntent.getStringExtra("serchresult");
         categorys = dataCategoryIntent.getStringExtra("cotagoryresult");
         tagling=dataCategoryIntent.getStringExtra("tagline");
-        retailerstr=dataCategoryIntent.getStringExtra("retailer");
+        retailerstr=dataCategoryIntent.getStringExtra("publisher");
         title = dataCategoryIntent.getStringExtra("title");
         isbn = dataCategoryIntent.getStringExtra("isbn");
         author = dataCategoryIntent.getStringExtra("author");
@@ -185,7 +185,7 @@ public class ConditionActivity extends AppCompatActivity {
             intent.putExtra("condition", ctagory);
             intent.putExtra("cotagoryresult",categorys);
             intent.putExtra("tagline", tagling);
-            intent.putExtra("retailer", retailerstr);
+            intent.putExtra("publisher", retailerstr);
             intent.putExtra("title", title);
             intent.putExtra("isbn", isbn);
             intent.putExtra("author", author);
@@ -228,7 +228,7 @@ public class ConditionActivity extends AppCompatActivity {
             intent.putExtra("condition", ctagory);
             intent.putExtra("cotagoryresult",categorys);
             intent.putExtra("tagline", tagling);
-            intent.putExtra("retailer", retailerstr);
+            intent.putExtra("publisher", retailerstr);
             intent.putExtra("title", title);
             intent.putExtra("isbn", isbn);
             intent.putExtra("author", author);

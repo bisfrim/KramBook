@@ -89,6 +89,13 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.user_profile_photo_change).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectImageUploadOption();
+            }
+        });
+
     }
 
     public void userFullNameClickHandler(View view) {

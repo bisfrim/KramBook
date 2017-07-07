@@ -59,7 +59,6 @@ public class MyProfileActivity extends AppCompatActivity implements AppBarLayout
     MyListingFragment myListing;
     SoldFragment sold;
     WishListFragment wishList;
-    public final static String EXTRA_USER_ID = "userId";
 
     private ArrayList<Beanclass> beans;
     private GridviewAdapter gridviewAdapter;
@@ -216,14 +215,6 @@ public class MyProfileActivity extends AppCompatActivity implements AppBarLayout
 
 
 
-   /* private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new MyListingFragment(), "My Listing");
-        adapter.addFragment(new SoldFragment(), "Sold");
-        adapter.addFragment(new WishListFragment(), "Wish List");
-        viewPager.setAdapter(adapter);
-    }*/
-
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int offset) {
 
@@ -240,35 +231,6 @@ public class MyProfileActivity extends AppCompatActivity implements AppBarLayout
         }
 
     }
-
-   /* class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
-
-        public ViewPagerAdapter(FragmentManager manager) {
-            super(manager);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
-        }
-    }*/
 
 
 

@@ -4,6 +4,7 @@ import android.app.Application;
 import android.util.Log;
 
 import com.app.krambook.activity.Activity;
+import com.app.krambook.activity.SettingsActivity;
 import com.app.krambook.models.Colg;
 import com.app.krambook.models.GlobalVariables;
 import com.app.krambook.models.Photo;
@@ -13,6 +14,8 @@ import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParsePush;
+import com.parse.ParsePushBroadcastReceiver;
+import com.parse.PushService;
 import com.parse.SaveCallback;
 import com.rollbar.android.Rollbar;
 
@@ -45,7 +48,6 @@ public class KramBookInitialize extends Application {
         //defaultACL.setPublicWriteAccess(true);
         ParseACL.setDefaultACL(defaultACL, true);
         Log.i(TAG, "Parse initialized");
-
 
 
         ParsePush.subscribeInBackground("global", new SaveCallback() {

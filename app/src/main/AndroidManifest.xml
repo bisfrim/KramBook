@@ -47,10 +47,22 @@
 
         <service android:name="com.parse.PushService" />
 
+        <!--
         <receiver android:name="com.parse.ParseBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+        </receiver>
+        -->
+
+        <receiver
+            android:name=".notification.CustomNotificationReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.parse.push.intent.RECEIVE" />
+                <action android:name="com.parse.push.intent.DELETE" />
+                <action android:name="com.parse.push.intent.OPEN" />
             </intent-filter>
         </receiver>
         <receiver
@@ -62,15 +74,6 @@
 
                 <!-- IMPORTANT: Change "com.parse.starter" to match your app's package name. -->
                 <category android:name="com.app.krambook" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name="com.parse.ParsePushBroadcastReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.parse.push.intent.RECEIVE" />
-                <action android:name="com.parse.push.intent.DELETE" />
-                <action android:name="com.parse.push.intent.OPEN" />
             </intent-filter>
         </receiver>
 
@@ -137,9 +140,15 @@
             android:name=".activity.ConditionActivity"
             android:label="@string/book_condition"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.BookDetailActivity"
-            android:label="@string/book_detail">
-        </activity>
+        <activity
+            android:name=".activity.BookDetailActivity"
+            android:label="@string/book_detail"></activity>
+        <activity android:name=".activity.OtherSellerProfileActivity"></activity>
+
+        <activity
+            android:name="info.vividcode.android.zxing.CaptureActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.ZXingCaptureActivity" />
     </application>
 
 </manifest> <!-- android:theme="@style/AppTheme.NoActionBar" -->

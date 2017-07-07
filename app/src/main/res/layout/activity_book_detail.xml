@@ -49,7 +49,7 @@
                     android:id="@+id/relativeLayout5">
 
 
-                    <com.github.siyamed.shapeimageview.CircularImageView
+                    <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:id="@+id/userphoto_details_imageView"
@@ -58,8 +58,6 @@
                         android:layout_alignParentStart="true"
                         android:src="@drawable/man"
                         android:scaleType="fitXY"
-                        app:siBorderWidth="1dp"
-                        app:siBorderColor="#b6818289"
                         android:layout_marginLeft="20dp" />
 
                     <TextView
@@ -198,7 +196,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
-                    android:text="ISBN"
+                    android:text="TITLE"
                     android:textColor="#175AAC"
                     android:textSize="15dp"
                     android:textStyle="bold" />
@@ -331,7 +329,6 @@
             android:layout_marginLeft="6dp"
             android:layout_marginRight="6dp"
             android:layout_marginTop="8dp"
-            android:background="@drawable/information"
             android:orientation="horizontal">
 
             <RelativeLayout
@@ -744,6 +741,7 @@
             </LinearLayout>
 
             <ImageButton
+                android:id="@+id/sellers_info"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="33"

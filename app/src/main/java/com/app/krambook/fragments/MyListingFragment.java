@@ -5,11 +5,13 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +19,17 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.app.krambook.R;
 import com.app.krambook.activity.BookDetailActivity;
-import com.app.krambook.activity.MainActivity;
+import com.app.krambook.activity.EnterBookInfoActivity;
 import com.app.krambook.activity.MyProfileActivity;
 import com.app.krambook.models.Favourteitem;
 import com.app.krambook.utils.ImageLoaderGrid;
 import com.bumptech.glide.Glide;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -36,12 +41,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import customfonts.MyTextView;
+import info.vividcode.android.zxing.CaptureActivity;
+import info.vividcode.android.zxing.CaptureActivityIntents;
+import info.vividcode.android.zxing.CaptureResult;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by hp1 on 21-01-2015.
  */
 public class MyListingFragment extends Fragment {
     private ProgressDialog mProgressDialog;
+    public static final String BASE_URl = "https://www.googleapis.com/books/v1/volumes?q=";
     View rootView;
     public List<Favourteitem> data = null;
     private HomeItemListAdapter adapter;
@@ -64,7 +75,48 @@ public class MyListingFragment extends Fragment {
         item_posted_view = (MyTextView)rootView.findViewById(R.id.item_posted_view);
         gridview = (GridView)rootView.findViewById(R.id.gridList);
 
+        FloatingActionButton actionA = (FloatingActionButton) rootView.findViewById(R.id.action_a);
+        actionA.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PackageManager pm = getActivity().getApplicationContext().getPackageManager();
+                if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+                    Intent captureIntent = new Intent(getActivity(), CaptureActivity.class);
+                    CaptureActivityIntents.setPromptMessage(captureIntent, "Scanning for ISBN...");
+                    startActivityForResult(captureIntent, 1);
+                } else {
+                    Toast toast = Toast.makeText(getActivity().getApplicationContext(), "No camera detected. Please enter ISBN manually.", Toast.LENGTH_SHORT);
+                    TextView txView = (TextView) toast.getView().findViewById(android.R.id.message);
+                    if (txView != null) txView.setGravity(Gravity.CENTER);
+                    toast.show();
+                }
+
+            }
+        });
+
         return rootView;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        String isbn = "";
+
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                CaptureResult res = CaptureResult.parseResultIntent(data);
+                isbn = res.getContents();
+            }
+        }
+
+        //isbn += BASE_URl;
+        Intent isbnIntent = new Intent(getActivity(), EnterBookInfoActivity.class);
+        isbnIntent.putExtra("isbn", isbn);
+        //isbnIntent.setAction("isbn");
+        getActivity().startActivity(isbnIntent);
+        getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+
     }
 
 
@@ -87,6 +139,7 @@ public class MyListingFragment extends Fragment {
                 ParseQuery<ParseObject> photosFromCurrentUserQuery = ParseQuery.getQuery("Photo");
                 photosFromCurrentUserQuery.whereEqualTo("user", ParseUser.getCurrentUser());
                 photosFromCurrentUserQuery.whereExists("image");
+                photosFromCurrentUserQuery.orderByDescending("updatedAt");
                 ob = photosFromCurrentUserQuery.find();
                 for (ParseObject country : ob) {
                     // Locate images in flag column

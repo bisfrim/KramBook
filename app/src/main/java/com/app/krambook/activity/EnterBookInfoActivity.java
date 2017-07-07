@@ -4,11 +4,15 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.support.v7.app.AppCompatActivity;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.annotation.IntDef;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,7 +36,20 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -40,13 +57,29 @@ import java.util.List;
 
 import customfonts.MyEditText;
 import customfonts.MyTextView;
+import cz.msebera.android.httpclient.HttpEntity;
+import cz.msebera.android.httpclient.HttpResponse;
+import cz.msebera.android.httpclient.StatusLine;
+import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.client.methods.HttpGet;
+import cz.msebera.android.httpclient.impl.client.HttpClientBuilder;
 
 public class EnterBookInfoActivity extends AppCompatActivity {
-
+    private final String LOG_TAG = EnterBookInfoActivity.class.getSimpleName();
     private Toolbar mToolbar;
     private ParseFile image;
     private ProgressDialog progressDialog;
     private Photo photo;
+    private Bitmap thumbImg;
+    String bookSearchString;
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({NETWORK_STATUS_OK, NETWORK_STATUS_DOWN})
+    public @interface NetworkStatus {
+    }
+
+    public static final int NETWORK_STATUS_OK = 0;
+    public static final int NETWORK_STATUS_DOWN = 1;
 
     ImageView priviewimage;
     String fileuri;
@@ -105,6 +138,9 @@ public class EnterBookInfoActivity extends AppCompatActivity {
         author = datagetintent.getStringExtra("author");
         price = datagetintent.getStringExtra("price");
 
+        bookSearchString = "https://www.googleapis.com/books/v1/volumes?" +
+                "q=isbn:" + isbn + "&key=AIzaSyCeQI70KNMhJ9pzWW2ikn7MsQglgLg_crs";
+        //new GetBookInfo().execute(bookSearchString);
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         final Bitmap bitmap = BitmapFactory.decodeFile(fileuri,
@@ -115,6 +151,8 @@ public class EnterBookInfoActivity extends AppCompatActivity {
         matrix.postRotate(90);
 //        else if(falg.equals("0"))
 //        {matrix.postRotate(90);}
+
+
         Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 
         priviewimage.setImageBitmap(bitmap);
@@ -203,7 +241,7 @@ public class EnterBookInfoActivity extends AppCompatActivity {
                 intent.putExtra("isbn", isbn_edit_txtview.getText().toString());
                 intent.putExtra("title", title_edit_txtview.getText().toString());
                 intent.putExtra("author", author_edit_txtview.getText().toString());
-                intent.putExtra("retailer", retailer_edit_txtview.getText().toString());
+                intent.putExtra("publisher", retailer_edit_txtview.getText().toString());
                 intent.putExtra("price", price_edit_txtview.getText().toString());
 
                 startActivity(intent);
@@ -223,7 +261,7 @@ public class EnterBookInfoActivity extends AppCompatActivity {
                 intentContition.putExtra("isbn", isbn_edit_txtview.getText().toString());
                 intentContition.putExtra("title", title_edit_txtview.getText().toString());
                 intentContition.putExtra("author", author_edit_txtview.getText().toString());
-                intentContition.putExtra("retailer", retailer_edit_txtview.getText().toString());
+                intentContition.putExtra("publisher", retailer_edit_txtview.getText().toString());
                 intentContition.putExtra("price", price_edit_txtview.getText().toString());
                 startActivity(intentContition);
                 overridePendingTransition(R.anim.right_in, R.anim.left_out);
@@ -401,11 +439,165 @@ public class EnterBookInfoActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    private class GetBookInfo extends AsyncTask<String, Void, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            progressDialog.setCancelable(false);
+            showProgressDialog();
+        }
+
+        @Override
+        protected String doInBackground(String... bookURLs) {
+            StringBuilder bookBuilder = new StringBuilder();
+
+            for (String bookSearchURL : bookURLs) {
+                HttpClient bookClient = HttpClientBuilder.create().build();
+                HttpGet bookGet = new HttpGet(bookSearchURL);
+                try {
+                    HttpResponse bookResponse = bookClient.execute(bookGet);
+                    StatusLine bookSearchStatus = bookResponse.getStatusLine();
+                    if (bookSearchStatus.getStatusCode() == 200) {
+                        //we have a result
+                        HttpEntity bookEntity = bookResponse.getEntity();
+                        InputStream bookContent = bookEntity.getContent();
+                        InputStreamReader bookInput = new InputStreamReader(bookContent);
+                        BufferedReader bookReader = new BufferedReader(bookInput);
+
+                        String lineIn;
+                        while ((lineIn = bookReader.readLine()) != null) {
+                            bookBuilder.append(lineIn);
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            return bookBuilder.toString();
+        }
+
+        protected void onPostExecute(String result) {
+            final String TITLE = "title";
+            final String SUBTITLE = "subtitle";
+            final String AUTHORS = "authors";
+            final String DESC = "description";
+            final String PUBLISHER = "publisher";
+            final String CATEGORIES = "categories";
+            final String IMG_URL_PATH = "imageLinks";
+            final String IMG_URL = "thumbnail";
+
+            try {
+                JSONObject resultObject = new JSONObject(result);
+                JSONArray bookArray = resultObject.getJSONArray("items");
+                JSONObject bookObject = bookArray.getJSONObject(0);
+                JSONObject volumeObject = bookObject.getJSONObject("volumeInfo");
+
+                String title = volumeObject.getString(TITLE);
+                String subtitle = "";
+                if (volumeObject.has(SUBTITLE)) {
+                    subtitle = volumeObject.getString(SUBTITLE);
+                }
+
+
+               /* String author="";
+                if(volumeObject.has(AUTHORS)){
+                    author = volumeObject.getString(AUTHORS);
+                }*/
+
+
+                StringBuilder authorBuild = new StringBuilder("");
+                try {
+                    JSONArray authorArray = volumeObject.getJSONArray(AUTHORS);
+                    for (int a = 0; a < authorArray.length(); a++) {
+                        if (a > 0) authorBuild.append(", ");
+                        authorBuild.append(authorArray.getString(a));
+                    }
+                    author_edit_txtview.setText(authorBuild.toString());
+                } catch (JSONException jse) {
+                    author_edit_txtview.setText("");
+                    jse.printStackTrace();
+                }
+
+
+                String categories = "";
+                if (volumeObject.has(CATEGORIES)) {
+                    categories = volumeObject.getString(CATEGORIES);
+                }
+
+                String publisher = "";
+                if (volumeObject.has(PUBLISHER)) {
+                    publisher = volumeObject.getString(PUBLISHER);
+                }
+
+                String imgUrl = "";
+                if (volumeObject.has(IMG_URL_PATH) && volumeObject.getJSONObject(IMG_URL_PATH).has(IMG_URL)) {
+                    imgUrl = volumeObject.getJSONObject(IMG_URL_PATH).getString(IMG_URL);
+                }
+
+
+                //JSONObject imageInfo = volumeObject.getJSONObject(IMG_URL_PATH);
+                new GetBookThumb().execute(imgUrl);
+
+
+                title_edit_txtview.setText(title);
+                tagline_edit_text.setText(subtitle);
+                category_textView.setText(categories);
+                retailer_edit_txtview.setText(publisher);
+
+
+            } catch (Exception e) {
+                priviewimage.setImageBitmap(null);
+                e.printStackTrace();
+            }
+            hideProgressDialog();
+        }
+    }
+
+
+    private class GetBookThumb extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... thumbURLs) {
+            try {
+                URL thumbURL = new URL(thumbURLs[0]);
+                URLConnection thumbConn = thumbURL.openConnection();
+                thumbConn.connect();
+
+                InputStream thumbIn = thumbConn.getInputStream();
+                BufferedInputStream thumbBuff = new BufferedInputStream(thumbIn);
+
+                thumbImg = BitmapFactory.decodeStream(thumbBuff);
+                thumbBuff.close();
+                thumbIn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return "";
+        }
+
+        protected void onPostExecute(String result) {
+            priviewimage.setImageBitmap(thumbImg);
+        }
+
+    }
+
     private void showProgressDialog() {
         progressDialog.show();
     }
 
     private void hideProgressDialog() {
         progressDialog.dismiss();
+    }
+
+    static private void setNetworkStatus(Context c, @EnterBookInfoActivity.NetworkStatus int networkStatus) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
+        SharedPreferences.Editor spe = sp.edit();
+        spe.putInt(c.getString(R.string.pref_network_status_key), networkStatus);
+        spe.commit();
     }
 }

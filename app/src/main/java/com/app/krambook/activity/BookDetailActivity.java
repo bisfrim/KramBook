@@ -15,16 +15,20 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.app.krambook.R;
+import com.app.krambook.fragments.HomeFragment;
 import com.app.krambook.models.Homeitem;
 import com.app.krambook.models.Photo;
+import com.app.krambook.other.CircleTransform;
 import com.app.krambook.utils.ImageLoader;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -34,15 +38,24 @@ import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.LocalDate;
+import org.w3c.dom.Text;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class BookDetailActivity extends AppCompatActivity {
+    private HomeFragment.HomeItemListAdapter homeAdapter;
     private Toolbar mToolbar;
     private boolean likeflag;
     private boolean followfalg;
@@ -51,7 +64,7 @@ public class BookDetailActivity extends AppCompatActivity {
     private int commentnumber;
     public TextView retailtextview;
     public TextView expiredatetextview;
-    public TextView taglinetextview;
+    public TextView taglinetextview,isbnTextView,bookTitleView;
     public TextView liketextview;
     public ImageView productimageview;
     public ImageView userimageview;
@@ -72,6 +85,7 @@ public class BookDetailActivity extends AppCompatActivity {
     ArrayList<String> follows;
     String photouserID;
     String photoID;
+    String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +109,8 @@ public class BookDetailActivity extends AppCompatActivity {
 
         moreimagebut = (ImageButton)findViewById(R.id.more_imageButton);
         taglinetextview=(TextView)findViewById(R.id.niketextView);
-
+        isbnTextView = (TextView)findViewById(R.id.isbn_txtview);
+        bookTitleView = (TextView)findViewById(R.id.book_title_view);
         liketextview=(TextView)findViewById(R.id.likenumber_hometextView);
         retailtextview=(TextView)findViewById(R.id.Retailer_textView);
         productimageview=(ImageView)findViewById(R.id.deal_imageView);
@@ -107,6 +122,17 @@ public class BookDetailActivity extends AppCompatActivity {
         userrealname_textview=(TextView)findViewById(R.id.name_hometextView);
         commenttextview=(TextView)findViewById(R.id.commentnumber_hometextView);
 
+        findViewById(R.id.sellers_info).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Homeitem homeMap = new Homeitem();
+                Intent sellerInfo = new Intent(BookDetailActivity.this, OtherSellerProfileActivity.class);
+                sellerInfo.putExtra(OtherSellerProfileActivity.EXTRA_USER_ID, currentuser.getObjectId());
+                BookDetailActivity.this.startActivity(sellerInfo);
+
+            }
+        });
+
         photo = new Photo();
         Intent getdataintente = getIntent();
         photoID = getdataintente.getStringExtra("photoID");
@@ -116,6 +142,18 @@ public class BookDetailActivity extends AppCompatActivity {
         getBookDetails();
 
     }
+
+
+    public int getDays(String begin) throws ParseException, java.text.ParseException {
+        long MILLIS_PER_DAY = 24 * 60 * 60 * 1000;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+
+        long start = dateFormat.parse(begin).getTime();
+        long end = new Date().getTime(); // 2nd date want to compare
+        long diff = (end - start) / (MILLIS_PER_DAY);
+        return (int) diff;
+    }
+
 
     private void getBookDetails(){
 
@@ -129,14 +167,21 @@ public class BookDetailActivity extends AppCompatActivity {
                     int inappcount=country.getInt("inapp");
                     if (inappcount<4){
 
-                        Date today=new Date(System.currentTimeMillis());
+                        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                        Calendar calendar = Calendar.getInstance();
+                        Date today= calendar.getTime();
                         Date c = (Date) country.get("expiry");
 
 
-                        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
 
                         String formattedDate = df.format(c);
-                        if(today.compareTo(c)==0){
+
+                        //Calculate days between using JodaTime API
+                        DateTime date1 = DateTime .parse(formattedDate);
+                        DateTime date2 = DateTime.now().minusDays(1);
+                        int days = Days.daysBetween(date2, date1).getDays();
+
+                        if(today.compareTo(c) > 0){
                             expiredatetextview.setText("EXPIRED ");
                             ParseFile image = (ParseFile) country.get("image");
                             ParseUser homeuser=country.getParseUser("user");
@@ -154,14 +199,17 @@ public class BookDetailActivity extends AppCompatActivity {
 
 
                             taglinetextview.setText("#" +(String) country.get("tagline"));
-
-
-
-
+                            isbnTextView.setText((String) country.get("isbn"));
+                            bookTitleView.setText((String) country.get("title"));
 
                             if (!( homeuser.get("photo") ==null)){
                                 ParseFile userimage = (ParseFile) homeuser.get("photo");
-                                Glide.with(BookDetailActivity.this).load(userimage.getUrl()).into(userimageview);
+                                Glide.with(BookDetailActivity.this).load(userimage.getUrl())
+                                        .crossFade()
+                                        .thumbnail(0.5f)
+                                        .bitmapTransform(new CircleTransform(BookDetailActivity.this))
+                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                        .into(userimageview);
 
                             }
 
@@ -205,7 +253,7 @@ public class BookDetailActivity extends AppCompatActivity {
                         }
                         else if(today.compareTo(c)<0) {
 
-                            expiredatetextview.setText("EXP: " + formattedDate);
+                            expiredatetextview.setText("EXPIRES IN : " +  days + " day(s)");
                             ParseFile image = (ParseFile) country.get("image");
                             ParseUser homeuser=country.getParseUser("user");
 
@@ -221,14 +269,18 @@ public class BookDetailActivity extends AppCompatActivity {
 
 
                             taglinetextview.setText("#"+ (String) country.get("tagline"));
-
-
-
+                            isbnTextView.setText((String) country.get("isbn"));
+                            bookTitleView.setText((String) country.get("title"));
 
 
                             if (!( homeuser.get("photo") ==null)){
                                 ParseFile userimage = (ParseFile) homeuser.get("photo");
-                                Glide.with(BookDetailActivity.this).load(userimage.getUrl()).into(userimageview);
+                                Glide.with(BookDetailActivity.this).load(userimage.getUrl())
+                                        .crossFade()
+                                        .thumbnail(0.5f)
+                                        .bitmapTransform(new CircleTransform(BookDetailActivity.this))
+                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                        .into(userimageview);
 
                             }
 
@@ -423,6 +475,7 @@ public class BookDetailActivity extends AppCompatActivity {
 //                        mProgressDialog.show();
 //                        follows.clear();
                     followfalg=false;
+
                     ParseQuery<ParseObject> query = ParseQuery.getQuery("Photo");
                     query.getInBackground(photoID, new GetCallback<ParseObject>() {
                         public void done(ParseObject photo_origin, ParseException e) {
@@ -471,6 +524,7 @@ public class BookDetailActivity extends AppCompatActivity {
                                     ParseObject alert = new ParseObject("Alert");
                                     alert.put("fromuser", ParseUser.getCurrentUser());
                                     alert.put("contente", (String) ParseUser.getCurrentUser().get("name") + " unfollow you");
+                                    Log.d("Unfollow" , (String) ParseUser.getCurrentUser().get("name") + " unfollow you");
                                     alert.put("photo", photo);
                                     alert.put("touser", touser);
                                     alert.saveInBackground();
@@ -826,4 +880,5 @@ public class BookDetailActivity extends AppCompatActivity {
     private void hideProgressDialog() {
         mProgressDialog.dismiss();
     }
+
 }

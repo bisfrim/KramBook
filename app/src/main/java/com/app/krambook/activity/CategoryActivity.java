@@ -39,7 +39,7 @@ public class CategoryActivity extends Activity {
         Intent datagetintent = getIntent();
         fileuri = datagetintent.getStringExtra("serchresult");
         tagling = datagetintent.getStringExtra("tagline");
-        retailerstr = datagetintent.getStringExtra("retailer");
+        retailerstr = datagetintent.getStringExtra("publisher");
         title = datagetintent.getStringExtra("title");
         isbn = datagetintent.getStringExtra("isbn");
         author = datagetintent.getStringExtra("author");
@@ -103,7 +103,7 @@ public class CategoryActivity extends Activity {
                 intent.putExtra("serchresult", fileuri);
                 intent.putExtra("cotagoryresult", ctagory);
                 intent.putExtra("tagline", tagling);
-                intent.putExtra("retailer", retailerstr);
+                intent.putExtra("publisher", retailerstr);
                 intent.putExtra("title", title);
                 intent.putExtra("isbn", isbn);
                 intent.putExtra("author", author);
@@ -143,7 +143,7 @@ public class CategoryActivity extends Activity {
                 intent.putExtra("serchresult", fileuri);
                 intent.putExtra("cotagoryresult", ctagory);
                 intent.putExtra("tagline", tagling);
-                intent.putExtra("retailer", retailerstr);
+                intent.putExtra("publisher", retailerstr);
                 intent.putExtra("title", title);
                 intent.putExtra("isbn", isbn);
                 intent.putExtra("author", author);

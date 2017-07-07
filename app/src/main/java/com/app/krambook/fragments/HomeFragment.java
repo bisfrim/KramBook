@@ -62,14 +62,21 @@ import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
+import customfonts.MyTextView;
 
 public class HomeFragment extends Fragment {
     private ProgressDialog mProgressDialog;
@@ -77,6 +84,7 @@ public class HomeFragment extends Fragment {
     private HomeItemListAdapter adapter;
     private Myadapter mainadapter;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private List<ParseObject> mLatestBooks = new ArrayList<>();
     ListView list;
     public String curentusername;
     StringBuffer buf;
@@ -153,7 +161,7 @@ public class HomeFragment extends Fragment {
             }
         }
 
-        retailerstring = filterintent.getStringExtra("retailer");
+        retailerstring = filterintent.getStringExtra("publisher");
         username = UserData.getCurrentUser().getUsername();
         product = new Photo();
         buf = new StringBuffer();
@@ -166,7 +174,7 @@ public class HomeFragment extends Fragment {
                 e.printStackTrace();
             }
         }
-        new RemoteDataTask().execute();
+
         setRetainInstance(true);
         //setHasOptionsMenu(true);
 
@@ -177,20 +185,20 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
-        //swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
         listview = (GridView) rootView.findViewById(android.R.id.list);
 
 
-        /*swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 LoadUpdatedData();
             }
         });
 
-        swipeRefreshLayout.setColorSchemeColors(R.color.colorAccent);*/
+        swipeRefreshLayout.setColorSchemeColors(R.color.colorAccent);
 
-
+        new RemoteDataTask().execute();
 
         return rootView;
     }
@@ -638,7 +646,7 @@ public class HomeFragment extends Fragment {
 
                 photosFromCurrentUserQuery.whereExists("image");
                 photosFromCurrentUserQuery.include("user");
-                photosFromCurrentUserQuery.orderByDescending("createdAt");
+                photosFromCurrentUserQuery.orderByDescending("updatedAt");
                 // Set the limit of objects to show
                 photosFromCurrentUserQuery.setLimit(setlimite += 10);
                 ob = photosFromCurrentUserQuery.find();
@@ -707,7 +715,7 @@ public class HomeFragment extends Fragment {
                     data.add(map);
 
 
-                    data.add(map);
+                    //data.add(map);
 
 
 //                    }
@@ -735,7 +743,7 @@ public class HomeFragment extends Fragment {
             // Close the progressdialog
             //mProgressDialog.dismiss();
 
-            //swipeRefreshLayout.setRefreshing(false);
+            swipeRefreshLayout.setRefreshing(false);
 
             //hideProgressDialog();
 
@@ -865,6 +873,7 @@ public class HomeFragment extends Fragment {
             holder.liketextview = (TextView) view.findViewById(R.id.likenumber_hometextView);
             holder.retailtextview = (TextView) view.findViewById(R.id.Retailer_textView);*/
             holder.productimageview = (ImageView) view.findViewById(R.id.deal_imageView);
+            holder.bookExpireDateView = (MyTextView) view.findViewById(R.id.book_expire_date);
           /*  holder.userimageview = (ImageView) view.findViewById(R.id.userphoto_details_imageView);
             holder.likebutimagebut = (ImageButton) view.findViewById(R.id.like_home_imageButton);
             holder.commentimagebut = (ImageButton) view.findViewById(R.id.comment_home_imageButton);
@@ -900,6 +909,44 @@ public class HomeFragment extends Fragment {
 //              imageLoader.DisplayImage(worldpopulationlist.get(position).getIamgeURL(), holder.productimageview);*/
 
             Glide.with(context).load(worldpopulationlist.get(position).getIamgeURL()).into(holder.productimageview);
+
+            //Display expire or not
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Photo");
+            query.include("user");
+            query.getInBackground(photoID, new GetCallback<ParseObject>() {
+                @Override
+                public void done(ParseObject object, ParseException e) {
+                    if (e == null) {
+                        photo = object;
+                        final Homeitem map = new Homeitem();
+                        int inappcount = object.getInt("inapp");
+                        if (inappcount<4){
+                            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                            Calendar calendar = Calendar.getInstance();
+                            Date today= calendar.getTime();
+                            Date c = (Date) object.get("expiry");
+
+                            String formattedDate = df.format(c);
+
+                            //Calculate days between using JodaTime API
+                            DateTime date1 = DateTime .parse(formattedDate);
+                            DateTime date2 = DateTime.now().minusDays(1);
+                            int days = Days.daysBetween(date2, date1).getDays();
+                            if(today.compareTo(c) > 0){
+                                holder.bookExpireDateView.setText("EXPIRED");
+
+                            }else if(today.compareTo(c)< 0){
+                                holder.bookExpireDateView.setText("EXPIRES IN : " +  days + " day(s)");
+
+                            }
+
+                        }
+                    }
+
+                }
+            });
+
+
            /* if (!worldpopulationlist.get(position).getUserimageurl().equals("")) {
 //                imageLoader.DisplayImage(worldpopulationlist.get(position).getUserimageurl(), holder.userimageview);
                 Glide.with(context).load(worldpopulationlist.get(position).getUserimageurl())
@@ -1519,6 +1566,7 @@ public class HomeFragment extends Fragment {
             public TextView userrealname_textview;
             public TextView commenttextview;
             public TextView retailtextview;
+            public MyTextView bookExpireDateView;
 
 
         }
