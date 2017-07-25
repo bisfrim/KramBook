@@ -5,8 +5,8 @@
     android:id="@+id/product_page_scroll_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.app.krambook.activity.BookDetailActivity"
-    android:scrollbars="none">
+    android:scrollbars="none"
+    tools:context="com.app.krambook.activity.BookDetailActivity">
 
 
     <RelativeLayout
@@ -27,68 +27,64 @@
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
 
-
-
         <LinearLayout
             android:id="@+id/product_page_title_layout"
             android:layout_width="fill_parent"
             android:layout_height="59dp"
+            android:layout_below="@+id/detail_toolbar"
             android:background="@drawable/product_page_title_bar_bg"
-            android:orientation="vertical"
-            android:layout_below="@+id/detail_toolbar" >
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="58dp"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <RelativeLayout
+                    android:id="@+id/relativeLayout5"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_alignParentTop="true"
-                    android:id="@+id/relativeLayout5">
+                    android:layout_alignParentTop="true">
 
 
                     <ImageView
+                        android:id="@+id/userphoto_details_imageView"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:id="@+id/userphoto_details_imageView"
-                        android:layout_centerVertical="true"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
-                        android:src="@drawable/man"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="20dp"
                         android:scaleType="fitXY"
-                        android:layout_marginLeft="20dp" />
+                        android:src="@drawable/man" />
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="Medium Text"
                         android:id="@+id/name_hometextView"
-                        android:layout_marginLeft="10dp"
-                        android:gravity="top"
-                        android:textSize="18dp"
-                        android:layout_marginStart="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignBottom="@+id/expierdate_hometextView"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_toEndOf="@+id/userphoto_details_imageView"
                         android:layout_toRightOf="@+id/userphoto_details_imageView"
-                        android:layout_toEndOf="@+id/userphoto_details_imageView" />
-
+                        android:gravity="top"
+                        android:text="Medium Text"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textSize="18sp" />
 
 
                     <TextView
+                        android:id="@+id/expierdate_hometextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="Medium Text"
-                        android:id="@+id/expierdate_hometextView"
-                        android:layout_alignParentRight="true"
                         android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="10dp"
-                        android:textSize="16dp" />
+                        android:text="Medium Text"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textSize="16sp" />
                 </RelativeLayout>
-
 
 
             </LinearLayout>
@@ -98,7 +94,6 @@
                 android:layout_height="1dp"
                 android:background="#FFDFDFDF" />
         </LinearLayout>
-
 
 
         <!-- Product Image layout -->
@@ -113,33 +108,62 @@
 
 
             <com.github.siyamed.shapeimageview.RoundedImageView
+                android:id="@+id/deal_imageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/deal_imageView"
-                android:src="@drawable/information"
-                android:scaleType="fitXY"
-                app:siBorderWidth="1dp"
-                app:siBorderColor="#fff7f7"
-                app:siRadius="3dp"
-                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
+                android:layout_alignParentTop="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/information"
+                app:siBorderColor="#fff7f7"
+                app:siBorderWidth="1dp"
+                app:siRadius="3dp" />
 
 
         </RelativeLayout>
+
+
+        <LinearLayout
+            android:id="@+id/product_price_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/product_page_image_layout"
+            android:background="@drawable/product_page_view_border"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/book_detail_price"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center_vertical|right"
+                android:text="$"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="#FFDFDFDF" />
+        </LinearLayout>
+
 
         <!-- Product price and ratings layout -->
 
         <LinearLayout
             android:id="@+id/product_page_price_ratings_layout"
             android:layout_width="match_parent"
-            android:layout_height="75dp"
+            android:layout_height="100dp"
             android:layout_below="@id/product_page_image_layout"
             android:layout_marginLeft="6dp"
             android:layout_marginRight="6dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="45dp"
             android:background="@drawable/product_page_view_border"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -154,16 +178,15 @@
                     android:layout_height="wrap_content"
                     android:text="ISBN:"
                     android:textColor="@android:color/black"
-                    android:textSize="12dp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/isbn_txtview"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:maxLines="1"
+                    android:layout_height="match_parent"
                     android:text="ISBN"
                     android:textColor="#175AAC"
-                    android:textSize="15dp"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
 
 
@@ -189,24 +212,20 @@
                     android:layout_height="wrap_content"
                     android:text="BOOK TITLE:"
                     android:textColor="@android:color/black"
-                    android:textSize="12dp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/book_title_view"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:maxLines="1"
+                    android:layout_height="match_parent"
                     android:text="TITLE"
                     android:textColor="#175AAC"
-                    android:textSize="15dp"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
 
 
             </LinearLayout>
         </LinearLayout>
-
-
-
 
 
         <!-- Product offers layout but removed
@@ -313,10 +332,10 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="8dp"
-            android:textColor="@android:color/black"
             android:text="USER CONTROL ICONS"
-            android:textStyle="bold"
-            android:textSize="15sp" />
+            android:textColor="@android:color/black"
+            android:textSize="15sp"
+            android:textStyle="bold" />
 
 
         <!-- Product emi/return/cod layout -->
@@ -483,7 +502,7 @@
                         android:layout_height="wrap_content"
                         android:text="RATINGS AND USER REVIEWS"
                         android:textColor="@android:color/black"
-                        android:textSize="15dp"
+                        android:textSize="15sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -518,13 +537,28 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
+                    android:id="@+id/star_layout"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="30dp"
                     android:layout_weight="195"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
+                    <!--
+                                        <RelativeLayout
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content" >
 
-
-
+                                            <ProgressBar
+                                                android:id="@+id/product_page_rating_progress_bar"
+                                                style="?android:attr/progressBarStyleHorizontal"
+                                                android:layout_width="75dp"
+                                                android:layout_height="20dp"
+                                                android:layout_marginLeft="10dp"
+                                                android:layout_marginTop="8dp"
+                                                android:progress="80"
+                                                android:progressDrawable="@drawable/ratings_star_progress_drawable"
+                                                android:tag="open_review_page" />
+                                        </RelativeLayout>-->
 
                 </LinearLayout>
 
@@ -543,7 +577,7 @@
                         android:gravity="center"
                         android:text="4.3"
                         android:textColor="@android:color/black"
-                        android:textSize="20sp"
+                        android:textSize="15sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -593,7 +627,7 @@
                 android:tag="open_specifications_page"
                 android:text="SPECIFICATIONS"
                 android:textColor="#D8DEE7"
-                android:textSize="11dp"
+                android:textSize="11sp"
                 android:textStyle="bold" />
 
             <Button
@@ -609,7 +643,7 @@
                 android:tag="open_summary_page"
                 android:text="SUMMARY"
                 android:textColor="#D8DEE7"
-                android:textSize="11dp"
+                android:textSize="11sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -618,13 +652,13 @@
         <LinearLayout
             android:id="@+id/product_page_seller_info_layout"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="100dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/product_page_spec_summary_layout"
             android:background="@drawable/product_page_view_border"
             android:orientation="horizontal"
-            android:tag="open_seller_info"
-            android:layout_below="@+id/product_page_spec_summary_layout"
-            android:layout_alignLeft="@+id/product_page_other_seller_layout"
-            android:layout_alignStart="@+id/product_page_other_seller_layout">
+            android:tag="open_seller_info">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -637,18 +671,17 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Sold By:"
+                    android:text="Publisher:"
                     android:textColor="@android:color/black"
-                    android:textSize="12dp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/Retailer_textView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:maxLines="1"
+                    android:layout_height="match_parent"
                     android:text="WS Retail"
                     android:textColor="#175AAC"
-                    android:textSize="15dp"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
 
 
@@ -674,21 +707,19 @@
                     android:layout_height="wrap_content"
                     android:text="Tagline:"
                     android:textColor="@android:color/black"
-                    android:textSize="12dp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/niketextView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:maxLines="1"
+                    android:layout_height="match_parent"
                     android:text="WS Retail"
                     android:textColor="#175AAC"
-                    android:textSize="15dp"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
 
 
             </LinearLayout>
-
 
 
             <ImageButton
@@ -705,7 +736,7 @@
         <LinearLayout
             android:id="@+id/product_page_other_seller_layout"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="200dp"
             android:layout_below="@id/product_page_seller_info_layout"
             android:layout_marginLeft="6dp"
             android:layout_marginRight="6dp"
@@ -716,38 +747,31 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="5dp"
-                android:layout_weight="268"
+                android:layout_weight="105"
                 android:orientation="vertical">
 
 
                 <TextView
+                    android:id="@+id/textView2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Sellers Info"
+                    android:text="DESCRIPTION"
                     android:textColor="@android:color/black"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/product_page_other_seller_from_info"
+                    android:id="@+id/product_description"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text=""
+                    android:layout_height="match_parent"
+                    android:scrollbars="vertical"
                     android:textColor="@android:color/black"
-                    android:textSize="12dp" />
+                    android:textSize="12sp" />
             </LinearLayout>
 
-            <ImageButton
-                android:id="@+id/sellers_info"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="33"
-                android:background="@android:color/transparent"
-                android:scaleType="center"
-                android:src="@drawable/detail_arrow" />
         </LinearLayout>
 
         <!-- Product other variants layout -->
@@ -755,30 +779,51 @@
         <LinearLayout
             android:id="@+id/product_page_other_variants_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_below="@id/product_page_other_seller_layout"
             android:layout_marginLeft="6dp"
             android:layout_marginRight="6dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/product_page_view_border"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="29dp"
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:gravity="center_vertical|left"
-                android:text="OTHER VARIANTS"
-                android:textColor="@android:color/black"
-                android:textSize="14dp"
-                android:textStyle="bold" />
+                android:layout_marginTop="5dp"
+                android:layout_weight="268"
+                android:orientation="vertical">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="#FFDFDFDF" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="29dp"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center_vertical|left"
+                    android:text="SELLER INFO"
+                    android:textColor="@android:color/black"
+                    android:textSize="14dp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="#FFDFDFDF" />
+
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/seller_info"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="33"
+                android:background="@android:color/transparent"
+                android:scaleType="center"
+                android:src="@drawable/detail_arrow" />
+
+
         </LinearLayout>
 
         <!-- Product similar products layout -->

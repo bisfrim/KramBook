@@ -1,5 +1,6 @@
 package com.app.krambook.fragments;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -9,7 +10,9 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -30,6 +33,7 @@ import com.app.krambook.models.Favourteitem;
 import com.app.krambook.utils.ImageLoaderGrid;
 import com.bumptech.glide.Glide;
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.google.zxing.Result;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -45,6 +49,8 @@ import info.vividcode.android.zxing.CaptureActivity;
 import info.vividcode.android.zxing.CaptureActivityIntents;
 import info.vividcode.android.zxing.CaptureResult;
 
+import me.dm7.barcodescanner.zxing.ZXingScannerView;
+
 import static android.app.Activity.RESULT_OK;
 
 /**
@@ -57,6 +63,8 @@ public class MyListingFragment extends Fragment {
     public List<Favourteitem> data = null;
     private HomeItemListAdapter adapter;
     private MyTextView item_posted_view;
+    private ZXingScannerView zXingScannerView;
+    public static final int PERM_REQ_CODE = 111;
     GridView gridview;
     List<ParseObject> ob;
 
@@ -67,10 +75,14 @@ public class MyListingFragment extends Fragment {
         mProgressDialog.setMessage(getString(R.string.loading));
         setRetainInstance(true);
         new RemoteDataTask().execute();
+
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         rootView = inflater.inflate(R.layout.fragment_mylisting,container,false);
         item_posted_view = (MyTextView)rootView.findViewById(R.id.item_posted_view);
         gridview = (GridView)rootView.findViewById(R.id.gridList);
@@ -79,7 +91,7 @@ public class MyListingFragment extends Fragment {
         actionA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PackageManager pm = getActivity().getApplicationContext().getPackageManager();
+            /*    PackageManager pm = getActivity().getApplicationContext().getPackageManager();
                 if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
                     Intent captureIntent = new Intent(getActivity(), CaptureActivity.class);
                     CaptureActivityIntents.setPromptMessage(captureIntent, "Scanning for ISBN...");
@@ -89,15 +101,45 @@ public class MyListingFragment extends Fragment {
                     TextView txView = (TextView) toast.getView().findViewById(android.R.id.message);
                     if (txView != null) txView.setGravity(Gravity.CENTER);
                     toast.show();
+                }*/
+                zXingScannerView=new ZXingScannerView(getActivity());
+                zXingScannerView.setResultHandler(new ZXingScannerResultHandler());
+                getActivity().setContentView(zXingScannerView);
+                zXingScannerView.startCamera();
+
+                int perm = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA);
+
+                if (perm == PackageManager.PERMISSION_DENIED) {
+
+                    if (!ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),  Manifest.permission.CAMERA)) {
+                        Toast.makeText(getActivity(), "Give the damn permission", Toast.LENGTH_SHORT).show();
+                    }
+
+                    ActivityCompat.requestPermissions(getActivity(), new String[] { Manifest.permission.CAMERA }, PERM_REQ_CODE);
                 }
 
+
+
+
             }
+
         });
 
         return rootView;
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+    }
+
+/*    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -117,6 +159,25 @@ public class MyListingFragment extends Fragment {
         getActivity().startActivity(isbnIntent);
         getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
 
+    }*/
+
+    class ZXingScannerResultHandler implements ZXingScannerView.ResultHandler{
+
+        @Override
+        public void handleResult(Result result) {
+            String resultcode = result.getText();
+            Intent isbnIntent = new Intent(getActivity(), EnterBookInfoActivity.class);
+            isbnIntent.putExtra("isbn", resultcode);
+            //isbnIntent.setAction("isbn");
+            getActivity().startActivity(isbnIntent);
+            getActivity().overridePendingTransition(R.anim.right_in, R.anim.left_out);
+
+            Log.v("ScannerApp", result.getText()); // Prints scan results
+            Log.v("ScannerApp", result.getBarcodeFormat().toString()); // Prints the scan format (qrcode, pdf417 etc.)
+
+            zXingScannerView.stopCamera();
+
+        }
     }
 
 
@@ -210,6 +271,8 @@ public class MyListingFragment extends Fragment {
 
                                                         try {
                                                             country.delete();
+                                                            adapter.notifyDataSetChanged();
+
                                                         } catch (ParseException e1) {
                                                             e1.printStackTrace();
                                                         }

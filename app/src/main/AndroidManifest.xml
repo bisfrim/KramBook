@@ -149,6 +149,8 @@
             android:name="info.vividcode.android.zxing.CaptureActivity"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.ZXingCaptureActivity" />
+
+
     </application>
 
 </manifest> <!-- android:theme="@style/AppTheme.NoActionBar" -->

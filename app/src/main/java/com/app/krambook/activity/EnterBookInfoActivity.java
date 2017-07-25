@@ -7,13 +7,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.IntDef;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,7 +24,6 @@ import android.widget.Toast;
 
 import com.app.krambook.R;
 import com.app.krambook.models.Photo;
-import com.app.krambook.parse_session.KramBookInitialize;
 import com.parse.FindCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
@@ -37,7 +36,6 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
@@ -71,7 +69,9 @@ public class EnterBookInfoActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private Photo photo;
     private Bitmap thumbImg;
-    String bookSearchString;
+    private MyTextView bookExpireDate, category_textView, condition_textView;
+    private MyEditText tagline_edit_text, isbn_edit_txtview, title_edit_txtview;
+    private MyEditText author_edit_txtview, retailer_edit_txtview, price_edit_txtview;
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({NETWORK_STATUS_OK, NETWORK_STATUS_DOWN})
@@ -82,22 +82,15 @@ public class EnterBookInfoActivity extends AppCompatActivity {
     public static final int NETWORK_STATUS_DOWN = 1;
 
     ImageView priviewimage;
-    String fileuri;
     Bitmap fileBitmap;
-    String catagory, condition;
-    String location;
-    String tagling;
-    String retailerstr;
-    String isbn, title, author, price;
+    String isbn, title, author, price,retailerstr,tagling,location,catagory,condition,fileuri,bookSearchString;
     String gallerystr;
     Integer DATE_DIALOG_ID = 999;
     ImageButton categoryimagebut, conditionimageBtn;
     int mYear, mMonth, mDay;
     byte[] saveData;
 
-    MyTextView bookExpireDate, category_textView, condition_textView;
-    MyEditText tagline_edit_text, isbn_edit_txtview, title_edit_txtview;
-    MyEditText author_edit_txtview, retailer_edit_txtview, price_edit_txtview;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +118,7 @@ public class EnterBookInfoActivity extends AppCompatActivity {
         retailer_edit_txtview = (MyEditText) findViewById(R.id.ratailer_deal_editText);
         price_edit_txtview = (MyEditText) findViewById(R.id.price_editText);
 
+
         Intent datagetintent = getIntent();
         fileuri = datagetintent.getStringExtra("serchresult");
         fileBitmap = (Bitmap) datagetintent.getParcelableExtra("serchresult");
@@ -138,27 +132,30 @@ public class EnterBookInfoActivity extends AppCompatActivity {
         author = datagetintent.getStringExtra("author");
         price = datagetintent.getStringExtra("price");
 
-        bookSearchString = "https://www.googleapis.com/books/v1/volumes?" +
-                "q=isbn:" + isbn + "&key=AIzaSyCeQI70KNMhJ9pzWW2ikn7MsQglgLg_crs";
-        //new GetBookInfo().execute(bookSearchString);
+        String stringToAdd = isbn_edit_txtview.getText().toString();
+        stringToAdd = stringToAdd.replace(" ", "%20").trim();
+        bookSearchString = "https://www.googleapis.com/books/v1/volumes?q="+isbn+stringToAdd;
+        new GetBookInfo().execute(bookSearchString);
 
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        final Bitmap bitmap = BitmapFactory.decodeFile(fileuri,
-                options);
-
-        Matrix matrix = new Matrix();
-//        if(falg.equals("1"))
-        matrix.postRotate(90);
-//        else if(falg.equals("0"))
-//        {matrix.postRotate(90);}
-
-
-        Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-
-        priviewimage.setImageBitmap(bitmap);
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-        saveData = bos.toByteArray();
+//        BitmapFactory.Options options = new BitmapFactory.Options();
+//        final Bitmap bitmap = BitmapFactory.decodeFile(fileuri,
+//                options);
+//
+//        Matrix matrix = new Matrix();
+////        if(falg.equals("1"))
+//        matrix.postRotate(90);
+////        else if(falg.equals("0"))
+////        {matrix.postRotate(90);}
+//
+//
+//        if (bitmap != null) {
+//            Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+//
+//            priviewimage.setImageBitmap(bitmap);
+//            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+//            saveData = bos.toByteArray();
+//        }
 
 
         Calendar c = Calendar.getInstance();
@@ -269,6 +266,7 @@ public class EnterBookInfoActivity extends AppCompatActivity {
             }
         });
 
+
     }
 
     private boolean passValidation(Context context) {
@@ -344,6 +342,8 @@ public class EnterBookInfoActivity extends AppCompatActivity {
                 tagline_edit_text.setError("Please enter a tagline");
             } else if (isbn_edit_txtview.getText().length() == 0) {
                 isbn_edit_txtview.setError("Please enter the isbn");
+            } else if (isbn_edit_txtview.length() != 13) {
+                isbn_edit_txtview.setError("ISBN must be 13 characters");
             } else if (title_edit_txtview.getText().length() == 0) {
                 title_edit_txtview.setError("Please enter a title");
             } else if (author_edit_txtview.getText().length() == 0) {
@@ -361,20 +361,20 @@ public class EnterBookInfoActivity extends AppCompatActivity {
             } else {
                 Calendar c = Calendar.getInstance();
 
-                image = new ParseFile("photo.jpg", saveData);
-                image.saveInBackground();
+                //image = new ParseFile("photo.jpg", saveData);
+                //image.saveInBackground();
                 showProgressDialog();
 
                 //Associate the picture with the current user
-                photo.setUser(ParseUser.getCurrentUser());
+                //photo.setUser(ParseUser.getCurrentUser());
                 //Add the image
-                photo.setImage(image);
-                if (photo.getObjectId() != null) {
-                    photo.setColgId(KramBookInitialize.global.getSomeVariable());
-                }
+                // photo.setImage(image);
+                //if (photo.getObjectId() != null) {
+                //  photo.setColgId(KramBookInitialize.global.getSomeVariable());
+                //}
                 //Add the thumbnail
                 photo.setLike("12");
-                photo.setCategory(catagory);
+                //photo.setCategory(catagory);
                 photo.setCondition(condition);
                 photo.setExpiry(expiredate);
                 photo.setTagline(tagline_edit_text.getText().toString());
@@ -489,19 +489,95 @@ public class EnterBookInfoActivity extends AppCompatActivity {
             final String PUBLISHER = "publisher";
             final String CATEGORIES = "categories";
             final String IMG_URL_PATH = "imageLinks";
-            final String IMG_URL = "thumbnail";
+            final String IMG_URL = "smallThumbnail";
 
             try {
                 JSONObject resultObject = new JSONObject(result);
-                JSONArray bookArray = resultObject.getJSONArray("items");
-                JSONObject bookObject = bookArray.getJSONObject(0);
-                JSONObject volumeObject = bookObject.getJSONObject("volumeInfo");
 
-                String title = volumeObject.getString(TITLE);
-                String subtitle = "";
-                if (volumeObject.has(SUBTITLE)) {
-                    subtitle = volumeObject.getString(SUBTITLE);
+                if (resultObject.has("items")) {
+                    JSONArray bookArray = resultObject.getJSONArray("items");
+                    String imgUrl;
+                    String title;
+                    String subtitle;
+                    String categories;
+                    String publisher;
+                    String author = "";
+
+
+                    JSONObject bookObject = bookArray.getJSONObject(0);
+                    JSONObject volumeObject = bookObject.getJSONObject("volumeInfo");
+
+                    if (volumeObject.has(IMG_URL_PATH)) {
+                        imgUrl = volumeObject.getJSONObject(IMG_URL_PATH).getString(IMG_URL);
+                        new GetBookThumb().execute(imgUrl);
+                    } else {
+                        imgUrl = null;
+                    }
+
+                    if (volumeObject.has(TITLE)) {
+                        title = volumeObject.getString(TITLE);
+                    } else {
+                        title = null;
+                    }
+                    if (volumeObject.has(SUBTITLE)) {
+                        subtitle = volumeObject.getString(SUBTITLE);
+                    } else {
+                        subtitle = null;
+                    }
+                    if (volumeObject.has(CATEGORIES)) {
+                        categories = volumeObject.getString(CATEGORIES);
+                    } else {
+                        categories = null;
+                    }
+                    if (volumeObject.has(PUBLISHER)) {
+                        publisher = volumeObject.getString(PUBLISHER);
+                    } else {
+                        publisher = null;
+                    }
+
+                    JSONArray authors = volumeObject.optJSONArray(AUTHORS);
+                    if (authors != null) {
+                        // if there is just one author
+                        if (authors.length() == 1) {
+                            author = authors.getString(0);
+                            //if there are multiple authors
+                        } else {
+                            for (int j = 0; j < authors.length(); j++) {
+                                author += "\n" + authors.getString(j);
+                            }
+                        }
+                    } else {
+                        author = null;
+                    }
+
+
+                      /*  StringBuilder authorBuild = new StringBuilder("");
+                        try {
+                            JSONArray authorArray = volumeObject.getJSONArray(AUTHORS);
+                            for (int a = 0; a < authorArray.length(); a++) {
+                                if (a > 0) authorBuild.append(", ");
+                                authorBuild.append(authorArray.getString(a));
+                            }
+                            author_edit_txtview.setText(authorBuild.toString());
+                        } catch (JSONException jse) {
+                            author_edit_txtview.setText("");
+                            jse.printStackTrace();
+                        }*/
+
+
+                    new GetBookThumb().execute(imgUrl);
+                    author_edit_txtview.setText(author);
+                    title_edit_txtview.setText(title);
+                    tagline_edit_text.setText(subtitle);
+                    category_textView.setText(categories);
+                    photo.setCategory(categories);
+                    retailer_edit_txtview.setText(publisher);
+
+                    Log.v("BookInfoActivity", imgUrl + author + title + subtitle + categories + publisher);
                 }
+
+
+
 
 
                /* String author="";
@@ -510,50 +586,28 @@ public class EnterBookInfoActivity extends AppCompatActivity {
                 }*/
 
 
-                StringBuilder authorBuild = new StringBuilder("");
-                try {
-                    JSONArray authorArray = volumeObject.getJSONArray(AUTHORS);
-                    for (int a = 0; a < authorArray.length(); a++) {
-                        if (a > 0) authorBuild.append(", ");
-                        authorBuild.append(authorArray.getString(a));
-                    }
-                    author_edit_txtview.setText(authorBuild.toString());
-                } catch (JSONException jse) {
-                    author_edit_txtview.setText("");
-                    jse.printStackTrace();
-                }
 
 
-                String categories = "";
-                if (volumeObject.has(CATEGORIES)) {
-                    categories = volumeObject.getString(CATEGORIES);
-                }
-
-                String publisher = "";
-                if (volumeObject.has(PUBLISHER)) {
-                    publisher = volumeObject.getString(PUBLISHER);
-                }
-
-                String imgUrl = "";
-                if (volumeObject.has(IMG_URL_PATH) && volumeObject.getJSONObject(IMG_URL_PATH).has(IMG_URL)) {
-                    imgUrl = volumeObject.getJSONObject(IMG_URL_PATH).getString(IMG_URL);
-                }
 
 
-                //JSONObject imageInfo = volumeObject.getJSONObject(IMG_URL_PATH);
-                new GetBookThumb().execute(imgUrl);
 
 
-                title_edit_txtview.setText(title);
-                tagline_edit_text.setText(subtitle);
-                category_textView.setText(categories);
-                retailer_edit_txtview.setText(publisher);
+               /* double decNumStars = Double.parseDouble(volumeObject.getString("averageRating"));
+                int numStars = (int)decNumStars;
+                starLayout.setTag(numStars);
+                starLayout.removeAllViews();
 
+                for(int s=0; s<numStars; s++){
+                    starViews[s].setImageResource(R.drawable.seller_rating_star);
+                    starLayout.addView(starViews[s]);
+                }*/
 
             } catch (Exception e) {
                 priviewimage.setImageBitmap(null);
                 e.printStackTrace();
             }
+
+
             hideProgressDialog();
         }
     }
@@ -582,6 +636,20 @@ public class EnterBookInfoActivity extends AppCompatActivity {
 
         protected void onPostExecute(String result) {
             priviewimage.setImageBitmap(thumbImg);
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            thumbImg.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+            saveData = bos.toByteArray();
+
+            image = new ParseFile("photo.jpg", saveData);
+            image.saveInBackground();
+            //showProgressDialog();
+
+            //Associate the picture with the current user
+            photo.setUser(ParseUser.getCurrentUser());
+            //Add the image
+            photo.setImage(image);
+            photo.setColgId((String) ParseUser.getCurrentUser().get("colgId"));
+
         }
 
     }

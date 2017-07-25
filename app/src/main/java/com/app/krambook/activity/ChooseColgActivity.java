@@ -20,7 +20,7 @@ import com.app.krambook.adapter.Colgadapter;
 import com.app.krambook.fragments.MyListingFragment;
 import com.app.krambook.models.Colg;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
-import com.google.android.gms.games.video.Videos;
+//import com.google.android.gms.games.video.Videos;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;

@@ -165,6 +165,8 @@ public class MyProfileActivity extends AppCompatActivity implements AppBarLayout
         //tabLayout = (TabLayout) findViewById(R.id.tabs);
         //tabLayout.setupWithViewPager(viewPager);
 
+        Intent bookDetailsIntent = getIntent();
+        bookDetailsIntent.getStringExtra("profileActivity");
 
 
     }

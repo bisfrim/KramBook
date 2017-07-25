@@ -10,6 +10,7 @@ import android.graphics.Point;
 import android.hardware.Camera;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -18,6 +19,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Display;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -25,15 +27,20 @@ import android.view.MenuItem;
 import android.view.OrientationEventListener;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.app.krambook.R;
 import com.app.krambook.other.FaceOverlayView;
 import com.desmond.squarecamera.CameraActivity;
 import com.desmond.squarecamera.ImageUtility;
+import com.google.zxing.Result;
 
-public class SellActivity extends AppCompatActivity {
+import me.dm7.barcodescanner.zxing.ZXingScannerView;
+
+public class SellActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
 
     private Toolbar mToolbar;
     private String classflag;
@@ -41,28 +48,88 @@ public class SellActivity extends AppCompatActivity {
     private static final int REQUEST_CAMERA = 0;
     private static final int REQUEST_CAMERA_PERMISSION = 1;
     private Point mSize;
+    private ZXingScannerView zXingScannerView;
+    public static final String TAG = "PERMS";
+    public static final int PERM_REQ_CODE = 111;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_sell);
+        setContentView(R.layout.activity_sell);
 
         //mToolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(mToolbar);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Display display = getWindowManager().getDefaultDisplay();
-        mSize = new Point();
-        display.getSize(mSize);
+        //Display display = getWindowManager().getDefaultDisplay();
+        //mSize = new Point();
+        //display.getSize(mSize);
 
-        Intent datagetintent = getIntent();
-        classflag= datagetintent.getStringExtra("class");
-        galleryplag=datagetintent.getStringExtra("gallery");;
-        requestForCameraPermission(getCurrentFocus());
+        //Intent datagetintent = getIntent();
+        //classflag= datagetintent.getStringExtra("class");
+        //galleryplag=datagetintent.getStringExtra("gallery");;
+        //requestForCameraPermission(getCurrentFocus());
+
+        ViewGroup contentFrame = (ViewGroup) findViewById(R.id.content_frame);
+        zXingScannerView = new ZXingScannerView(this);
+        contentFrame.addView(zXingScannerView);
+
+
+        int perm = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
+
+        if (perm == PackageManager.PERMISSION_DENIED) {
+
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
+                Toast.makeText(this, "Give the damn permission", Toast.LENGTH_SHORT).show();
+            }
+
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, PERM_REQ_CODE);
+        }
+
 
     }
 
-    public String getPath(Uri uri) {
+    @Override
+    protected void onPause() {
+        super.onPause();
+        zXingScannerView.stopCamera();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        zXingScannerView.setResultHandler(this);
+        zXingScannerView.startCamera();
+        zXingScannerView.setAutoFocus(true);
+    }
+
+    @Override
+    public void handleResult(Result result) {
+        String resultcode = result.getText();
+        Intent isbnIntent = new Intent(SellActivity.this, EnterBookInfoActivity.class);
+        isbnIntent.putExtra("isbn", resultcode);
+        //isbnIntent.setAction("isbn");
+        startActivity(isbnIntent);
+        overridePendingTransition(R.anim.right_in, R.anim.left_out);
+
+        Log.v("ScannerApp", result.getText()); // Prints scan results
+        Log.v("ScannerApp", result.getBarcodeFormat().toString()); // Prints the scan format (qrcode, pdf417 etc.)
+
+        // Note:
+        // * Wait 2 seconds to resume the preview.
+        // * On older devices continuously stopping and resuming camera preview can result in freezing the app.
+        // * I don't know why this is the case but I don't have the time to figure out.
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                zXingScannerView.resumeCameraPreview(SellActivity.this);
+            }
+        }, 2000);
+    }
+
+
+    /*public String getPath(Uri uri) {
         // just some safety built in
         if( uri == null ) {
             // TODO perform some logging or show user feedback
@@ -166,7 +233,7 @@ public class SellActivity extends AppCompatActivity {
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
-    }
+    }*/
 
 
     @Override
@@ -176,6 +243,8 @@ public class SellActivity extends AppCompatActivity {
         intent = new Intent(SellActivity.this, MainActivity.class);
         startActivity(intent);
     }
+
+
 
 
     /*@Override

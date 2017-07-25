@@ -47,7 +47,7 @@ public class OtherSellerProfileActivity extends AppCompatActivity implements App
     protected CoordinatorLayout sellerRootLayout;
     private ImageLoader imageLoaderprofile;
     private MaterialTabHost tabHost;
-    public final static String EXTRA_USER_ID = "userID";
+    public final static String EXTRA_USER_ID = "userId";
     private ViewPager viewPager;
     private boolean isHideToolbarView = false;
     private ViewPagerAdapter mAdapter;
