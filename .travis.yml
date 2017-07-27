@@ -64,4 +64,4 @@ before_install:
 
 script:
 
-- "./gradlew clean build connectedCheck -PdisablePreDex --stacktrace"
+- ./gradlew build connectedCheck
